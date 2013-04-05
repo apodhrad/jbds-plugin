@@ -1,30 +1,20 @@
-package org.jboss.apodhrad.jbds.plugin;
-
-import static org.hamcrest.core.AllOf.allOf;
+package org.jboss.apodhrad.jbds.plugin.finder;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.hamcrest.Matcher;
-import org.jboss.apodhrad.jbds.plugin.matcher.EndsWith;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-public class JBDSSearch {
+public abstract class Finder {
 
-	private static final String JBDS_REPO = "http://machydra.brq.redhat.com/www.qa.jboss.com/binaries/RHDS/builds/development";
-
-	@SuppressWarnings("unchecked")
-	public static void main(String[] args) throws Exception {
-		Matcher<String> matcher = allOf(new EndsWith(".installer"));
-		System.out.println(getLinks(JBDS_REPO, matcher));
-	}
-
-	public void search() {
-		
+	public static String getLink(String url, Matcher<String> matcher) throws IOException {
+		List<String> list = getLinks(url, matcher);
+		return list.get(0);
 	}
 
 	public static List<String> getLinks(String url, Matcher<String> matcher) throws IOException {
@@ -44,7 +34,5 @@ public class JBDSSearch {
 		return list;
 	}
 
-	public void getLink() {
-
-	}
+	public abstract String getUrl(String version) throws IOException ;
 }
