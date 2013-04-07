@@ -63,7 +63,7 @@ public class JBDSInstaller extends AbstractMojo {
 	public void execute() throws MojoExecutionException {
 		getLog().info("Downloading...");
 		String url = HOST + "/stable/6.0.0.GA.installer/" + JBDS;
-		new DownloadPlugin(project, session, manager).donwload(url);
+		new DownloadPlugin(project, session, manager).download(url);
 		getLog().info("Downloaded");
 
 		getLog().info("Installing " + jbdsInstaller.getAbsolutePath());

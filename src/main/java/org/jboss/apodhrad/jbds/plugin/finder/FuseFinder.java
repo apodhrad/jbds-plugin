@@ -5,6 +5,7 @@ import static org.hamcrest.core.AllOf.allOf;
 import java.io.IOException;
 
 import org.hamcrest.Matcher;
+import org.jboss.apodhrad.jbds.plugin.matcher.EndsWith;
 import org.jboss.apodhrad.jbds.plugin.matcher.IsVersion;
 import org.jboss.apodhrad.jbds.plugin.matcher.StartsWith;
 
@@ -14,7 +15,8 @@ public class FuseFinder extends Finder {
 
 	public String getUrl(String version) throws IOException {
 		Matcher<String> matcher = allOf(new IsVersion(), new StartsWith(version));
-		return getLink(REPO, new StartsWith(version));
+		String url = REPO + "/" + getLink(REPO, matcher);
+		return url + "/" + getLink(url, new EndsWith("linux.gtk.x86_64.zip"));
 	}
 
 }

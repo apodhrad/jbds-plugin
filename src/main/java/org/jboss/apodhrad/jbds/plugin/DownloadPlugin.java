@@ -21,12 +21,16 @@ public class DownloadPlugin extends MojoExecutor {
 		this.pluginManager = pluginManager;
 	}
 
-	public void donwload(String url) throws MojoExecutionException {
+	public void download(String url) throws MojoExecutionException {
+		download(url, true);
+	}
+	
+	public void download(String url, boolean unpack) throws MojoExecutionException {
 		executeMojo(
 				plugin(groupId("com.googlecode.maven-download-plugin"),
 						artifactId("maven-download-plugin"),
-						version("0.2-SNAPSHOT")), goal("wget"),
-				configuration(element(name("url"), url)),
+						version("1.0.0")), goal("wget"),
+				configuration(element(name("url"), url), element("unpack", Boolean.toString(unpack))),
 				executionEnvironment(mavenProject, mavenSession, pluginManager));
 	}
 }
