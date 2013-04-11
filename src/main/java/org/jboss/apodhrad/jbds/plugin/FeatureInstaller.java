@@ -60,7 +60,7 @@ public class FeatureInstaller extends AbstractMojo {
 				}
 			}
 		}
-
+		
 		eclipse.installFeatures(features);
 
 		getLog().info("Done.");

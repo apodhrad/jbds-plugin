@@ -40,8 +40,8 @@ import org.codehaus.plexus.util.FileUtils;
 /**
  * Installs JBDS
  */
-@Mojo(name = "install", defaultPhase = LifecyclePhase.COMPILE)
-public class JBDSInstaller extends AbstractMojo {
+@Mojo(name = "jbds", defaultPhase = LifecyclePhase.COMPILE)
+public class JbdsInstaller extends AbstractMojo {
 
 	public static final String HOST = "http://machydra.brq.redhat.com/www.qa.jboss.com/binaries/RHDS/builds";
 	public static final String JBDS = "jbdevstudio-product-universal-6.0.0.GA-v20121206-1855-B186.jar";

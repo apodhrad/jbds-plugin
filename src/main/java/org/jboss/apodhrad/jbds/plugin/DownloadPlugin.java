@@ -24,13 +24,25 @@ public class DownloadPlugin extends MojoExecutor {
 	public void download(String url) throws MojoExecutionException {
 		download(url, true);
 	}
-	
+
 	public void download(String url, boolean unpack) throws MojoExecutionException {
 		executeMojo(
 				plugin(groupId("com.googlecode.maven-download-plugin"),
-						artifactId("maven-download-plugin"),
-						version("1.0.0")), goal("wget"),
-				configuration(element(name("url"), url), element("unpack", Boolean.toString(unpack))),
+						artifactId("maven-download-plugin"), version("1.0.0")),
+				goal("wget"),
+				configuration(element(name("url"), url),
+						element("unpack", Boolean.toString(unpack))),
+				executionEnvironment(mavenProject, mavenSession, pluginManager));
+	}
+
+	public void download(String url, boolean unpack, String output) throws MojoExecutionException {
+		executeMojo(
+				plugin(groupId("com.googlecode.maven-download-plugin"),
+						artifactId("maven-download-plugin"), version("1.0.0")),
+				goal("wget"),
+				configuration(element(name("url"), url),
+						element("unpack", Boolean.toString(unpack)),
+						element(name("outputFileName"), output)),
 				executionEnvironment(mavenProject, mavenSession, pluginManager));
 	}
 }
