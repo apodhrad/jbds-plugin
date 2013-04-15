@@ -1,4 +1,4 @@
-package org.jboss.apodhrad.jbds.plugin.eclipse;
+package org.jboss.apodhrad.jbds.plugin;
 
 import java.io.File;
 import java.lang.reflect.Method;
@@ -10,6 +10,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * 
+ * @author apodhrad
+ * 
+ */
 public class Eclipse {
 
 	private File jarFile;

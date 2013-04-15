@@ -6,6 +6,11 @@ import org.apache.maven.plugin.MojoExecutionException;
 import org.apache.maven.project.MavenProject;
 import org.twdata.maven.mojoexecutor.MojoExecutor;
 
+/**
+ * 
+ * @author apodhrad
+ * 
+ */
 public class DownloadPlugin extends MojoExecutor {
 
 	private MavenProject mavenProject;

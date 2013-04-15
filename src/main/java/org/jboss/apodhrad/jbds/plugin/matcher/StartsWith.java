@@ -3,6 +3,11 @@ package org.jboss.apodhrad.jbds.plugin.matcher;
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
 
+/**
+ * 
+ * @author apodhrad
+ *
+ */
 public class StartsWith extends BaseMatcher<String> {
 
 	private String prefix;
