@@ -77,14 +77,19 @@ public class Eclipse {
 	}
 
 	public void execute(String[] command) {
+		int result = 1;
 		try {
 			ClassLoader cl = new URLClassLoader(new URL[] { jarFile.toURI().toURL() }, null);
-			Class<?> clazz = cl.loadClass("org.eclipse.core.launcher.Main");
-			Method main = clazz.getMethod("main", String[].class);
-			main.invoke(clazz, new Object[] { command });
+			Class<?> clazz = cl.loadClass("org.eclipse.equinox.launcher.Main");
+			Method main = clazz.getMethod("run", String[].class);
+			Object obj = main.invoke(clazz.newInstance(), new Object[] { command });
+			result = (Integer) obj;
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new RuntimeException("Exception occured during command execution");
+		}
+		if (result != 0) {
+			throw new RuntimeException("Execution failed [result=" + result + "]");
 		}
 	}
 
