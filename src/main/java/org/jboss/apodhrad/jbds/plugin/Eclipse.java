@@ -1,6 +1,8 @@
 package org.jboss.apodhrad.jbds.plugin;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
@@ -79,6 +81,46 @@ public class Eclipse {
 		installFeature(collectionToString(features));
 	}
 
+	public void runBot(String product, String pluginName, String className, String target) {
+		File securityFile = new File(jarFile.getParentFile().getAbsolutePath() + "/password");
+		FileWriter out = null;
+		try {
+			out = new FileWriter(securityFile.getAbsoluteFile());
+			out.write("master");
+			out.flush();
+			out.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		List<String> command = new ArrayList<String>();
+		command.add("-application");
+		command.add("org.eclipse.swtbot.eclipse.junit.headless.swtbottestapplication");
+		command.add("-product");
+		command.add(product);
+		command.add("-testApplication");
+		command.add(pluginName);
+		command.add("-testPluginName");
+		command.add(pluginName);
+		command.add("-className");
+		command.add(className);
+		command.add("-data");
+		command.add(target + "/workspace");
+		command.add("formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter," + target + "/" + className + ".xml");
+		command.add("formatter=org.apache.tools.ant.taskdefs.optional.junit.PlainJUnitResultFormatter");
+		command.add("-consoleLog");
+		command.add("-nosplash");
+		command.add("-noExit");
+		if(securityFile.exists()) {
+			command.add("-eclipse.password");
+			command.add(securityFile.getAbsolutePath());
+		}
+		command.add("-vmargs");
+		command.add("-Dusage_reporting_enabled=false");
+		
+		execute(command);
+	}
+	
 	public void execute(List<String> command) {
 		execute(command.toArray(new String[command.size()]));
 	}
