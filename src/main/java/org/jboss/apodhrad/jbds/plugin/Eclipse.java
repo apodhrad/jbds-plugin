@@ -33,6 +33,13 @@ public class Eclipse {
 		updateSites.add(updateSite);
 	}
 
+	public void listFeatures() {
+		for (String updateSite : updateSites) {
+			System.out.println("Update Site: " + updateSite);
+			listFeatures(updateSite);
+		}
+	}
+
 	public void listFeatures(String updateSite) {
 		List<String> command = new ArrayList<String>();
 		command.add("-application");
