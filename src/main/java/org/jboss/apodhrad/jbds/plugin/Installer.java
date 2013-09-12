@@ -163,7 +163,10 @@ public class Installer extends AbstractMojo {
 		DownloadPlugin downloadPlugin = new DownloadPlugin(project, session, manager);
 		downloadPlugin.download(getEclipseUrl(), isWindowsPlatform(), getEclipseInstaller());
 		if (!isWindowsPlatform()) {
-			untar(getEclipseInstaller());
+			String eclipseInstaller = getEclipseInstaller();
+			ExecPlugin execPlugin = new ExecPlugin(project, session, manager);
+			getLog().info("tar xvf " + eclipseInstaller);
+			execPlugin.tar("xvf", eclipseInstaller);
 		}
 		return new Eclipse(target + "/eclipse");
 	}
@@ -215,27 +218,4 @@ public class Installer extends AbstractMojo {
 		return System.getProperty("os.name").toLowerCase().contains("win");
 	}
 
-	private void untar(String tarFile) {
-		String command = "tar xvf " + target + "/" + tarFile + " -C " + target;
-		getLog().info(command);
-		try {
-			Process p = Runtime.getRuntime().exec(command);
-			BufferedReader bri = new BufferedReader(new InputStreamReader(p.getInputStream()));
-			BufferedReader bre = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-			String line = null;
-			while ((line = bri.readLine()) != null) {
-				getLog().debug(line);
-			}
-			bri.close();
-			while ((line = bre.readLine()) != null) {
-				getLog().error(line);
-			}
-			bre.close();
-			p.waitFor();
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new RuntimeException("Exception during executing '" + command + "'");
-		}
-		new File(target + "/" + tarFile).delete();
-	}
 }
