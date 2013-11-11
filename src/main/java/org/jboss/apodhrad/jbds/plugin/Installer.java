@@ -60,6 +60,9 @@ public class Installer extends AbstractMojo {
 	@Parameter
 	private Set<String> features;
 
+	@Parameter(alias = "jre.location")
+	private String jreLocation;
+	
 	public void execute() throws MojoExecutionException {
 		Eclipse eclipse = null;
 		if (jbdsInstaller != null && jbdsInstaller.toString().length() > 0) {
@@ -127,6 +130,9 @@ public class Installer extends AbstractMojo {
 	private String createInstallationFile() throws IOException {
 		String dest = target + "/jbdevstudio";
 		String jre = System.getenv("JAVA_HOME") + "/jre/bin/java";
+		if(jreLocation != null && jreLocation.length() > 0) {
+			jre = jreLocation;
+		}
 
 		String tempFile = target + "/install.xml";
 		String targetFile = target + "/installation.xml";
