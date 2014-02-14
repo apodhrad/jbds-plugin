@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.maven.artifact.repository.MavenArtifactRepository;
@@ -22,6 +23,8 @@ import org.apache.maven.plugins.annotations.Mojo;
 import org.apache.maven.plugins.annotations.Parameter;
 import org.apache.maven.project.MavenProject;
 import org.codehaus.plexus.util.FileUtils;
+import org.jboss.apodhrad.jbds.plugin.matcher.IsJavaExecutable;
+import org.jboss.apodhrad.jbds.plugin.util.FileSearch;
 
 /**
  * 
@@ -127,12 +130,13 @@ public class Installer extends AbstractMojo {
 		return new Eclipse(target + "/jbdevstudio/studio");
 	}
 
-	private String createInstallationFile() throws IOException {
-		String dest = target + "/jbdevstudio";
-		String jre = System.getenv("JAVA_HOME") + "/jre/bin/java";
-		if(jreLocation != null && jreLocation.length() > 0) {
-			jre = jreLocation;
+	private String createInstallationFile() throws IOException, MojoExecutionException {
+		String jre = getJreLocation();
+		if(jre == null) {
+			throw new MojoExecutionException("Cannot find JRE location!");
 		}
+		
+		String dest = target + "/jbdevstudio";
 
 		String tempFile = target + "/install.xml";
 		String targetFile = target + "/installation.xml";
@@ -222,6 +226,27 @@ public class Installer extends AbstractMojo {
 
 	private boolean isWindowsPlatform() {
 		return System.getProperty("os.name").toLowerCase().contains("win");
+	}
+	
+	private String getJreLocation() {
+		String jreLoc = null;
+		
+		// find jre location from java home
+		String javaHome = System.getProperty("java.home");
+		getLog().info("JRE: " + javaHome);
+		FileSearch fileSearch = new FileSearch();
+		fileSearch.find(javaHome, new IsJavaExecutable());
+		List<File> result = fileSearch.getResult();
+		if(!result.isEmpty()) {
+			jreLoc = result.get(0).getAbsolutePath();
+		}
+		
+		// find jre location from plugin configuration
+		if(jreLocation != null && jreLocation.length() > 0) {
+			jreLoc = jreLocation;
+		}
+		
+		return jreLoc;
 	}
 
 }
