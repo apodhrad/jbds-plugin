@@ -99,7 +99,7 @@ public class Installer extends AbstractMojo {
 		// Install JBDS
 		String installationFile = null;
 		try {
-			installationFile = createInstallationFile();
+			installationFile = createInstallationFile(getJBDSVersion(jarFile));
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 			throw new RuntimeException("Exception occured during creating installation file");
@@ -129,8 +129,8 @@ public class Installer extends AbstractMojo {
 		}
 		return new Eclipse(target + "/jbdevstudio/studio");
 	}
-
-	private String createInstallationFile() throws IOException, MojoExecutionException {
+	
+	private String createInstallationFile(String jbdsVersion) throws IOException, MojoExecutionException {
 		String jre = getJreLocation();
 		if(jre == null) {
 			throw new MojoExecutionException("Cannot find JRE location!");
@@ -141,7 +141,11 @@ public class Installer extends AbstractMojo {
 		String tempFile = target + "/install.xml";
 		String targetFile = target + "/installation.xml";
 
-		URL url = getClass().getResource("/install.xml");
+		String sourceFile = "/install.xml";
+		if(jbdsVersion != null && jbdsVersion.startsWith("8")) {
+			sourceFile = "/install-8.xml";
+		}
+		URL url = getClass().getResource(sourceFile);
 
 		FileUtils.copyURLToFile(url, new File(tempFile));
 		BufferedReader in = new BufferedReader(new FileReader(tempFile));
@@ -247,6 +251,11 @@ public class Installer extends AbstractMojo {
 		}
 		
 		return jreLoc;
+	}
+	
+	private String getJBDSVersion(String installer) {
+		String[] part = installer.split("-");
+		return part[3];
 	}
 
 }
