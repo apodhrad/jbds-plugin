@@ -4,7 +4,7 @@
 	<groupId>org.jboss.apodhrad</groupId>
 	<artifactId>jbds-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
-	<version>0.0.3-SNAPSHOT</version>
+	<version>0.0.3</version>
 	<name>JBDS Plugin</name>
 	<url>https://github.com/apodhrad/jbds-plugin</url>
 
@@ -13,13 +13,13 @@
 	  <repository>
 	    <id>nexus-apodhrad</id>
 	    <name>My releases</name>
-	    <url>http://nexus-apodhrad.rhcloud.com/nexus/content/repositories/releases</url>
+	    <url>http://apodhrad.org/nexus/content/repositories/releases</url>
 	  </repository>
 	  <!-- Publish snapshots here -->
 	  <snapshotRepository>
 	    <id>nexus-apodhrad</id>
 	    <name>My snapshots</name>
-	    <url>http://nexus-apodhrad.rhcloud.com/nexus/content/repositories/snapshots</url>
+	    <url>http://apodhrad.org/nexus/content/repositories/snapshots</url>
 	  </snapshotRepository>
 	</distributionManagement>
 
