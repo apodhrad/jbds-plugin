@@ -255,7 +255,12 @@ public class Installer extends AbstractMojo {
 	
 	private String getJBDSVersion(String installer) {
 		String[] part = installer.split("-");
-		return part[3];
+		for (int i = 0; i < part.length; i++) {
+			if(part[i].contains(".")) {
+				return part[i];
+			}
+		}
+		return null;
 	}
 
 }
