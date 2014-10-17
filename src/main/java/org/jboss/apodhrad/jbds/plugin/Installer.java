@@ -37,6 +37,8 @@ import org.jboss.apodhrad.jbds.plugin.util.FileSearch;
 public class Installer extends AbstractMojo {
 
 	public static final String ECLIPSE_DEFAULT_VERSION = "jee-juno-SR2";
+	
+	public static final String ECLIPSE_DEFAULT_MIRROR = "http://www.eclipse.org/downloads/download.php?r=1&file=/technology/epp/downloads/release";
 
 	@Parameter(defaultValue = "${project}")
 	private MavenProject project;
@@ -65,6 +67,9 @@ public class Installer extends AbstractMojo {
 
 	@Parameter(alias = "jre.location")
 	private String jreLocation;
+	
+	@Parameter(alias = "eclipse.mirror", defaultValue = ECLIPSE_DEFAULT_MIRROR)
+	private String eclipseMirror;
 	
 	public void execute() throws MojoExecutionException {
 		Eclipse eclipse = null;
@@ -186,10 +191,8 @@ public class Installer extends AbstractMojo {
 	}
 
 	private String getEclipseUrl() {
-		String url = "http://www.eclipse.org/downloads/download.php?file=/technology/epp/downloads/release";
 		String[] version = getEclipseVersion().split("-");
-		url += "/" + version[1] + "/" + version[2] + "/" + getEclipseInstaller();
-		return url + "&r=1";
+		return eclipseMirror + "/" + version[1] + "/" + version[2] + "/" + getEclipseInstaller();
 	}
 
 	private String getEclipseVersion() {
