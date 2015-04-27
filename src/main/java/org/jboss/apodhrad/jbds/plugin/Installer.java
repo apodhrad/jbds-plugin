@@ -71,6 +71,12 @@ public class Installer extends AbstractMojo {
 	@Parameter(alias = "eclipse.mirror", defaultValue = ECLIPSE_DEFAULT_MIRROR)
 	private String eclipseMirror;
 	
+	@Parameter
+	private String[] programArgs;
+	
+	@Parameter
+	private String[] vmArgs;
+	
 	public void execute() throws MojoExecutionException {
 		Eclipse eclipse = null;
 		if (jbdsInstaller != null && jbdsInstaller.toString().length() > 0) {
@@ -92,6 +98,23 @@ public class Installer extends AbstractMojo {
 		if (features != null && !features.isEmpty()) {
 			eclipse.installFeatures(features);
 		}
+		
+		if (programArgs != null) {
+			getLog().info("Setting program arguments:");
+			for (String programArg: programArgs) {
+				getLog().info("\t" + programArg);
+			}
+			eclipse.addProgramArgument(programArgs);
+		}
+		
+		if (vmArgs != null) {
+			getLog().info("Setting VM arguments:");
+			for (String vmArg: vmArgs) {
+				getLog().info("\t" + vmArg);
+			}
+			eclipse.addVMArgument(vmArgs);
+		}
+		
 		getLog().info("Finished");
 	}
 

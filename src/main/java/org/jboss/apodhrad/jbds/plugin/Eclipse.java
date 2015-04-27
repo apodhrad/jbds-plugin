@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.apache.commons.io.FileUtils;
+
 /**
  * 
  * @author apodhrad
@@ -190,4 +192,63 @@ public class Eclipse {
 		}
 		return sb.substring(1);
 	}
+	
+	public void addProgramArgument(String... args) {
+		File iniFile = getIniFile();
+		List<String> originalLines = null;
+		try {
+			originalLines = FileUtils.readLines(iniFile);
+		} catch (IOException e) {
+			throw new RuntimeException("Cannot read from '" + iniFile.getAbsolutePath() + "'", e);
+		}
+		
+		List<String> revisedLines = new ArrayList<String>();
+		for (String line: originalLines) {
+			if (line.startsWith("-vmargs") || line.startsWith("--launcher.appendVmargs")) {
+				for (String arg: args) {
+					revisedLines.add(arg);
+				}
+				args = new String[] {};
+			}
+			revisedLines.add(line);
+		}
+		
+		try {
+			FileUtils.writeLines(iniFile, revisedLines);
+		} catch (IOException e) {
+			throw new RuntimeException("Cannot write to '" + iniFile.getAbsolutePath() + "'", e);
+		}
+	}
+	
+	public void addVMArgument(String... args) {
+		File iniFile = getIniFile();
+		List<String> originalLines = null;
+		try {
+			originalLines = FileUtils.readLines(iniFile);
+		} catch (IOException e) {
+			throw new RuntimeException("Cannot read from '" + iniFile.getAbsolutePath() + "'", e);
+		}
+		
+		List<String> revisedLines = new ArrayList<String>(originalLines);
+		for (String arg: args) {
+			revisedLines.add(arg);
+		}
+		
+		try {
+			FileUtils.writeLines(iniFile, revisedLines);
+		} catch (IOException e) {
+			throw new RuntimeException("Cannot write to '" + iniFile.getAbsolutePath() + "'", e);
+		}
+	}
+	
+	public File getIniFile() {
+		File eclipseDir = jarFile.getParentFile().getParentFile();
+		for (File file: eclipseDir.listFiles()) {
+			if (file.getName().endsWith(".ini")) {
+				return file;
+			}
+		}
+		throw new RuntimeException("Cannot find .ini file at '" + eclipseDir.getAbsolutePath() + "'");
+	}
+
 }
