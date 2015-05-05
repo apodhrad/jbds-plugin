@@ -4,7 +4,7 @@
 	<groupId>org.jboss.apodhrad</groupId>
 	<artifactId>jbds-plugin</artifactId>
 	<packaging>maven-plugin</packaging>
-	<version>0.0.6</version>
+	<version>0.0.7</version>
 	<name>JBDS Plugin</name>
 	<url>https://github.com/apodhrad/jbds-plugin</url>
 

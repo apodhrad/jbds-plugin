@@ -248,6 +248,15 @@ public class Eclipse {
 				return file;
 			}
 		}
+		for (File dir: eclipseDir.listFiles()) {
+			if (dir.getName().endsWith(".app") && dir.isDirectory()) {
+				for (File file: new File(dir, "Contents/MacOS").listFiles()) {
+					if (file.getName().endsWith(".ini")) {
+						return file;
+					}
+				}
+			}
+		}
 		throw new RuntimeException("Cannot find .ini file at '" + eclipseDir.getAbsolutePath() + "'");
 	}
 
