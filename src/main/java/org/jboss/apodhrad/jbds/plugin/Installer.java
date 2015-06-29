@@ -173,6 +173,9 @@ public class Installer extends AbstractMojo {
 		if(jbdsVersion != null && jbdsVersion.startsWith("8")) {
 			sourceFile = "/install-8.xml";
 		}
+		if(jbdsVersion != null && jbdsVersion.startsWith("9")) {
+			sourceFile = "/install-9.xml";
+		}
 		URL url = getClass().getResource(sourceFile);
 
 		FileUtils.copyURLToFile(url, new File(tempFile));
