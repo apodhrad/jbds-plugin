@@ -13,6 +13,8 @@ import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.FileUtils;
+import org.jboss.apodhrad.jbds.plugin.matcher.FileNameStartsWith;
+import org.jboss.apodhrad.jbds.plugin.util.FileSearch;
 
 /**
  * 
@@ -21,18 +23,53 @@ import org.apache.commons.io.FileUtils;
  */
 public class Eclipse {
 
+	private static final String LAUNCHER_PREFIX = "org.eclipse.equinox.launcher_";
+	
 	private File jarFile;
 	private Set<String> updateSites;
 
-	public Eclipse(String eclipseHome) {
-		this(findLauncher(eclipseHome));
+	public Eclipse(String path) {
+		this(new File(path));
 	}
 
-	public Eclipse(File jarFile) {
-		this.jarFile = jarFile;
-		updateSites = new HashSet<String>();
+	public Eclipse(File file) {
+		List<File> launchers = null;
+		if (file.isDirectory()) {
+			launchers = new FileSearch().find(file, new FileNameStartsWith(LAUNCHER_PREFIX));
+			if (launchers.isEmpty()) {
+				throw new RuntimeException("Cannot find any eclipse structure in '" + file.getAbsolutePath() + "'");
+			}
+			for (File launcher: launchers) {
+				if (isEclipseStructure(launcher)) {
+					file = launcher;
+				}
+			}
+		}
+		if (!isEclipseStructure(file)) {
+			throw new RuntimeException("Cannot find any eclipse structure in '" + file.getAbsolutePath() + "'");
+		}
+		this.jarFile = file;
+		this.updateSites = new HashSet<String>();
 	}
 
+	private static boolean isEclipseStructure(File launcher) {
+		if (launcher.isDirectory() || !launcher.exists()) {
+			return false;
+		}
+		if (!launcher.getName().startsWith(LAUNCHER_PREFIX)) {
+			return false;
+		}
+		File pluginsFolder = launcher.getParentFile();
+		if (pluginsFolder == null || !pluginsFolder.getName().equals("plugins")) {
+			return false;
+		}
+		File featuresFolder = new File(pluginsFolder.getParentFile(), "features");
+		if (featuresFolder == null || !featuresFolder.exists()) {
+			return false;
+		}
+		return true;
+	}
+	
 	public void addUpdateSite(String updateSite) {
 		updateSites.add(updateSite);
 	}

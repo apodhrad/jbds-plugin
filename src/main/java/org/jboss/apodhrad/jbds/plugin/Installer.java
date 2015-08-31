@@ -268,8 +268,7 @@ public class Installer extends AbstractMojo {
 		String javaHome = System.getProperty("java.home");
 		getLog().info("JRE: " + javaHome);
 		FileSearch fileSearch = new FileSearch();
-		fileSearch.find(javaHome, new IsJavaExecutable());
-		List<File> result = fileSearch.getResult();
+		List<File> result = fileSearch.find(new File(javaHome), new IsJavaExecutable());
 		if(!result.isEmpty()) {
 			jreLoc = result.get(0).getAbsolutePath();
 		}
